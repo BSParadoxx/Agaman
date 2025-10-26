@@ -399,12 +399,32 @@ container.addEventListener('click', () => {
   }
 });
 
-// 📜 Close letter when tapping outside text area (works on phones too)
-letter.addEventListener('click', e => {
-  if (!e.target.closest('#letterContent') && e.target.id !== 'translateBtn') {
-    letter.classList.remove('show-letter');
-    setTimeout(() => container.classList.remove('open'), 900);
-    isOpen = false;
+// 📜 Close letter when tapping anywhere (except translation button)
+document.addEventListener('click', e => {
+  if (isOpen) {
+    const clickedTranslateBtn = e.target.id === 'translateBtn';
+    const clickedEnvelope = e.target.closest('#envelopeContainer');
+
+    // If not clicking translate button or unopened envelope
+    if (!clickedTranslateBtn && !clickedEnvelope) {
+      letter.classList.remove('show-letter');
+      setTimeout(() => container.classList.remove('open'), 900);
+      isOpen = false;
+    }
+  }
+});
+
+// 🖐️ Support mobile taps
+document.addEventListener('touchstart', e => {
+  if (isOpen) {
+    const clickedTranslateBtn = e.target.id === 'translateBtn';
+    const clickedEnvelope = e.target.closest('#envelopeContainer');
+
+    if (!clickedTranslateBtn && !clickedEnvelope) {
+      letter.classList.remove('show-letter');
+      setTimeout(() => container.classList.remove('open'), 900);
+      isOpen = false;
+    }
   }
 });
 
@@ -432,6 +452,5 @@ for (let i = 0; i < 15; i++) {
   orbs.appendChild(orb);
 }
 </script>
-
 </body>
 </html>
