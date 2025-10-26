@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>आगमन-समर्पित पत्र १ </title>
+<title>आगमन-समर्पित पत्र १</title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 <style>
 body {
@@ -14,9 +14,10 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: linear-gradient(120deg, #f8e7dc, #dce8f9, #f6e4dc);
+  background: linear-gradient(120deg, #d8a67c, #b2c4e0, #e6b49c);
   background-size: 300% 300%;
   animation: movingLight 20s ease-in-out infinite alternate;
+  position: relative;
 }
 
 @keyframes movingLight {
@@ -35,10 +36,11 @@ body {
 }
 .orb {
   position: absolute;
-  background: radial-gradient(circle, rgba(255,255,255,0.45), transparent 70%);
+  background: radial-gradient(circle, rgba(255,255,255,0.7), rgba(255,255,255,0) 70%);
   border-radius: 50%;
   animation: floatOrb 20s linear infinite;
   mix-blend-mode: screen;
+  filter: blur(1px);
 }
 @keyframes floatOrb {
   from { transform: translateY(100vh) scale(0.6); opacity: 0.6; }
@@ -52,7 +54,7 @@ body {
   height: 340px;
   perspective: 1200px;
   cursor: pointer;
-  z-index: 2;
+  z-index: 10; /* ensures it's always clickable */
   animation: gentleFloat 4s ease-in-out infinite;
 }
 
@@ -79,7 +81,7 @@ body {
   position: absolute;
   inset: 0;
   background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  opacity: 0.25;
+  opacity: 0.45;
   mix-blend-mode: multiply;
 }
 
@@ -188,7 +190,18 @@ body {
   padding: 30px;
   line-height: 1.7;
   color: #2a1f19;
-  z-index: 10;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.letter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 .letter h2 {
@@ -205,15 +218,7 @@ body {
   height: 80vh;
   transform: translate(-50%, -50%) scale(1);
   overflow-y: auto;
-}
-
-.show-letter::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  opacity: 0.3;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 /* When open */
@@ -309,13 +314,11 @@ body {
   }
 }
 
-/* ---------- FINAL GLOBAL PARAGRAPH RULE (applies everywhere) ---------- */
-.letter p{
+/* Paragraph spacing */
+.letter p {
   margin-top: 4px !important;
   margin-bottom: 6px !important;
   line-height: 1.6 !important;
-  /* optional: reduce font-size slightly to control wrapping:
-     font-size: inherit; */
 }
 </style>
 </head>
