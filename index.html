@@ -54,7 +54,7 @@ body {
   height: 340px;
   perspective: 1200px;
   cursor: pointer;
-  z-index: 10; /* ensures it's always clickable */
+  z-index: 10;
   animation: gentleFloat 4s ease-in-out infinite;
 }
 
@@ -222,20 +222,58 @@ body {
 }
 
 /* When open */
-.open .flap {
-  transform: rotateX(-180deg);
-}
-
-.open .header-text,
-.open .sub-header {
-  opacity: 0;
-}
-
+.open .flap { transform: rotateX(-180deg); }
+.open .header-text, .open .sub-header { opacity: 0; }
 .open .wax-seal {
   opacity: 0;
   transform: translateX(-50%) scale(0);
   transition: all 0.6s ease;
 }
+
+/* Translation link - bottom left, subtle and italic */
+/* Translation link - bottom left, subtle and italic, inside the letter */
+#translateBtn {
+  position: sticky;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: #7a5647;
+  font-style: italic;
+  border: none;
+  padding: 3px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.6s ease, color 0.3s ease;
+  z-index: 25;
+}
+
+.show-letter #translateBtn {
+  opacity: 1;
+}
+
+#translateBtn:hover {
+  color: #b35c45;
+}
+
+@media (max-width: 480px) {
+  #translateBtn {
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  #translateBtn {
+    bottom: 40px;
+    left: 12px;
+    font-size: 12px;
+  }
+}
+
 
 /* Scrollbar styling */
 .letter::-webkit-scrollbar {
@@ -248,70 +286,23 @@ body {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .container {
-    width: 340px;
-    height: 240px;
-  }
-
-  .header-text {
-    font-size: 20px;
-    top: 160px;
-  }
-
-  .sub-header {
-    font-size: 15px;
-    top: 190px;
-  }
-
-  .wax-seal {
-    width: 45px;
-    height: 45px;
-    top: 105px;
-  }
-
-  .letter {
-    padding: 20px;
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  .letter h2 {
-    font-size: 28px;
-  }
+  .container { width: 340px; height: 240px; }
+  .header-text { font-size: 20px; top: 160px; }
+  .sub-header { font-size: 15px; top: 190px; }
+  .wax-seal { width: 45px; height: 45px; top: 105px; }
+  .letter { padding: 20px; font-size: 15px; line-height: 1.6; }
+  .letter h2 { font-size: 28px; }
+  #translateBtn { font-size: 13px; bottom: 8px; left: 10px; }
 }
 
 @media (max-width: 480px) {
-  .container {
-    width: 280px;
-    height: 190px;
-  }
-
-  .header-text {
-    font-size: 18px;
-    top: 130px;
-  }
-
-  .sub-header {
-    font-size: 15px;
-    top: 155px;
-  }
-
-  .wax-seal {
-    width: 40px;
-    height: 40px;
-    top: 85px;
-  }
-
-  .letter {
-    width: 90vw;
-    height: 85vh;
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  .letter h2 {
-    font-size: 24px;
-  }
+  .container { width: 280px; height: 190px; }
+  .header-text { font-size: 18px; top: 130px; }
+  .sub-header { font-size: 15px; top: 155px; }
+  .wax-seal { width: 40px; height: 40px; top: 85px; }
+  .letter { width: 90vw; height: 85vh; padding: 10px; font-size: 14px; }
+  .letter h2 { font-size: 24px; }
+  #translateBtn { font-size: 12px; bottom: 6px; left: 8px; }
 }
 
 /* Paragraph spacing */
@@ -336,9 +327,10 @@ body {
 </div>
 
 <div class="letter" id="letter">
-  <h2></h2>
-
-  <p>दिनहरू साधारण थिए।</p>
+  <button id="translateBtn">See Translation</button>
+  <div id="letterContent">
+    <h2></h2>
+    <p>दिनहरू साधारण थिए।</p>
 
   <p>घाम झुल्किन्थ्यो, अस्ताउँथ्यो, बादल लाग्थे, पानी पर्थ्यो र सधैं जस्तै संसार आफ्नै लयमा बगिरहेको थियो। म पनि आफ्नै संसारमा व्यस्त थिएँ, आफ्ना काम, सोच, पीडा र स–साना रमाइला कुरामा हराएको थिएँ।</p>
 
@@ -354,13 +346,44 @@ body {
 
   <p>वर्षौ त्यहि रहिरहने रुख!</p>
 
-  <p style="text-align:right; font-weight:600;">— ऋषभ</p>
+    <p style="text-align:right; font-weight:600;">— ऋषभ</p>
+  </div>
 </div>
 
 <script>
 const container = document.getElementById('envelopeContainer');
 const letter = document.getElementById('letter');
+const translateBtn = document.getElementById('translateBtn');
+const letterContent = document.getElementById('letterContent');
 let isOpen = false;
+let showingNepali = true;
+
+const nepaliText = `<p>दिनहरू साधारण थिए।</p>
+
+  <p>घाम झुल्किन्थ्यो, अस्ताउँथ्यो, बादल लाग्थे, पानी पर्थ्यो र सधैं जस्तै संसार आफ्नै लयमा बगिरहेको थियो। म पनि आफ्नै संसारमा व्यस्त थिएँ, आफ्ना काम, सोच, पीडा र स–साना रमाइला कुरामा हराएको थिएँ।</p>
+
+  <p>तर जसरी ऋतु बदलिन्छन्, ग्रीष्म ओइलिँदै वर्षाको इस्पर्श आउँछ, र शरदको रमाइलोसँगै सर्दी नजिकिँदै जान्छ, त्यसरी नै कसैको मेरो जीवनमा आगमन भयो। आगमन यस्तो भयो कि म त्यसैमा निहित भए, आगमन सुखद भयो, हृदयमा सन्तुष्टि ल्याउने र खुशी भर्ने। म मग्न छु ऊमा। कल्पनामा गर्छु जहाँ उसको मृदु स्पर्श छ, बगैँचाको सुगन्ध छ, विहानीको किरण सँगै, चिरबिर र नदीको मिठो ध्वनी छ। एउटा मानिसका लागि रमाउन यति भए पुग्छ, मेरो लागि यो अथाह छ।</p>
+
+  <p>आगमन त मेरो पनि भएको हो उसको यो समयमा। जिज्ञासु, चञ्चल र अलिकति चिन्तित उसको त्यो प्यारो मुटुको पनि आफ्नो रमाइला प्रतिक्रिया होलान, त्यसको व्याख्या त म गर्न सक्दिन तर अनुमान गर्ने प्रयास जहिले गरिरहन्छु।</p>
+
+  <p>मैले आफैलाई प्रश्न गर्थे, के र कसरी भन्दै। तर उत्तर नखोजि त्यस पलमा रमाउदै जानु नै मेरो उत्तर बन्यो। उत्तर त शब्दमा रहेन, त्यो त अनुभूति रहेछ। अहिले त बिरुवा नै छ। हाँगाहरू पलाउँदै छन्, कोपिलाहरू पनि अलि अलि।</p>
+
+  <p>रुख त हुनै छ।</p>
+
+  <p>लटरम्म फल फल्ने रुख, छाँया दिने।</p>
+
+  <p>वर्षौ त्यहि रहिरहने रुख!</p>
+
+  <p style="text-align:right; font-weight:600;">— ऋषभ</p>`;
+
+const englishText = `
+<h2></h2>
+<p>The days were simple and ordinary.</p>
+<p>The sun rose and set. Clouds gathered, rain fell, and everything followed its usual rhythm. I lived quietly in my own world, surrounded by routine, thoughts, sorrows and small joys.</p>
+<p>But slowly, just as the seasons change, someone entered my life. Like summer giving way to the rains, the rains softening into autumn, and autumn welcoming winter, her arrival was gentle and unannounced. Before I knew it, she had become a part of my days, something constant and familiar.</p>
+<p>Her presence brought a quiet joy and warmth to my heart. I often find myself lost in thoughts of her — her gentle touch, the scent of a garden, the morning light, the song of birds, and the soft murmur of a river. Such moments are enough for anyone to feel peace. For me, they feel endless. Perhaps I too have entered her world — her curious, lively, slightly anxious heart. I cannot explain its responses, but I can always imagine them.</p>
+<p>I used to ask myself what it all meant and how it happened. Eventually, I stopped searching for answers. Living in the moment became the answer itself. The truth was never in words but in feeling. Now there is a sapling, its branches growing and buds beginning to open. One day it will become a tree, full of fruit, rich with shade, and strong enough to stand for years.</p>   
+<p style="text-align:right; font-weight:600;">— Rishav</p>`; 
 
 container.addEventListener('click', () => {
   if (!isOpen) {
@@ -370,12 +393,23 @@ container.addEventListener('click', () => {
   }
 });
 
-letter.addEventListener('click', () => {
-  if (isOpen) {
+letter.addEventListener('click', e => {
+  if (e.target === letter) {
     letter.classList.remove('show-letter');
     setTimeout(() => container.classList.remove('open'), 900);
     isOpen = false;
   }
+});
+
+translateBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  letterContent.style.opacity = 0;
+  setTimeout(() => {
+    letterContent.innerHTML = showingNepali ? englishText : nepaliText;
+    translateBtn.textContent = showingNepali ? 'नेपालीमा हेर्नुहोस्' : 'See Translation';
+    showingNepali = !showingNepali;
+    letterContent.style.opacity = 1;
+  }, 300);
 });
 
 // Floating orbs
