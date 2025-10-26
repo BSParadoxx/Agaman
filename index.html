@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ne">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>आगमन-समर्पित पत्र १ </title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Noto Serif Devanagari', serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(120deg, #f8e7dc, #dce8f9, #f6e4dc);
+  background-size: 300% 300%;
+  animation: movingLight 20s ease-in-out infinite alternate;
+}
+
+@keyframes movingLight {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Floating glowing orbs */
+.orbs {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+.orb {
+  position: absolute;
+  background: radial-gradient(circle, rgba(255,255,255,0.45), transparent 70%);
+  border-radius: 50%;
+  animation: floatOrb 20s linear infinite;
+  mix-blend-mode: screen;
+}
+@keyframes floatOrb {
+  from { transform: translateY(100vh) scale(0.6); opacity: 0.6; }
+  to { transform: translateY(-20vh) scale(1); opacity: 0; }
+}
+
+/* Envelope Container */
+.container {
+  position: relative;
+  width: 500px;
+  height: 340px;
+  perspective: 1200px;
+  cursor: pointer;
+  z-index: 2;
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Envelope body */
+.envelope {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #f9e9d8, #f3d3b3);
+  border: 2px solid #c9a474;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.envelope::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+}
+
+/* Decorative front fold */
+.envelope .front {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #f3d1ab, #e5b37c);
+  clip-path: polygon(0 0, 100% 0, 50% 60%);
+  box-shadow: inset 0 -4px 8px rgba(0,0,0,0.15);
+  z-index: 3;
+}
+
+/* Flap (opens on click) */
+.flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(180deg, #f1b47c, #d6965f);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 1s ease-in-out;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-shadow: inset 0 -5px 10px rgba(0,0,0,0.15);
+  z-index: 5;
+}
+
+/* Gold lining at the flap edge */
+.flap::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #eac98f, #fff3d6, #eac98f);
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+/* Wax seal */
+.wax-seal {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55px;
+  height: 55px;
+  background: radial-gradient(circle at 30% 30%, #9b2c2c, #701b1b);
+  border-radius: 50%;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 6;
+}
+
+.wax-seal::before {
+  content: "✶";
+  position: absolute;
+  font-size: 26px;
+  color: #f7d9c3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Great Vibes", cursive;
+}
+
+/* Text on envelope */
+.header-text, .sub-header {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  transition: opacity 0.6s ease;
+  z-index: 7;
+}
+
+.header-text {
+  top: 220px;
+  font-weight: 700;
+  font-size: 26px;
+  color: #5b3b2e;
+}
+
+.sub-header {
+  top: 260px;
+  font-size: 30px;
+  color: #7a5647;
+  font-style: italic;
+}
+
+/* Letter */
+.letter {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+  background: linear-gradient(180deg, #fffdf9, #fef7e6);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  overflow: hidden;
+  transition: all 1.2s ease-in-out;
+  padding: 30px;
+  line-height: 1.7;
+  color: #2a1f19;
+  z-index: 10;
+}
+
+.letter h2 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 34px;
+  color: #b35c45;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.show-letter {
+  opacity: 1;
+  width: 80vw;
+  height: 80vh;
+  transform: translate(-50%, -50%) scale(1);
+  overflow-y: auto;
+}
+
+.show-letter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* When open */
+.open .flap {
+  transform: rotateX(-180deg);
+}
+
+.open .header-text,
+.open .sub-header {
+  opacity: 0;
+}
+
+.open .wax-seal {
+  opacity: 0;
+  transform: translateX(-50%) scale(0);
+  transition: all 0.6s ease;
+}
+
+/* Scrollbar styling */
+.letter::-webkit-scrollbar {
+  width: 8px;
+}
+.letter::-webkit-scrollbar-thumb {
+  background-color: #d1b197;
+  border-radius: 4px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    width: 340px;
+    height: 240px;
+  }
+
+  .header-text {
+    font-size: 20px;
+    top: 160px;
+  }
+
+  .sub-header {
+    font-size: 15px;
+    top: 190px;
+  }
+
+  .wax-seal {
+    width: 45px;
+    height: 45px;
+    top: 105px;
+  }
+
+  .letter {
+    padding: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .letter h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 280px;
+    height: 190px;
+  }
+
+  .header-text {
+    font-size: 18px;
+    top: 130px;
+  }
+
+  .sub-header {
+    font-size: 15px;
+    top: 155px;
+  }
+
+  .wax-seal {
+    width: 40px;
+    height: 40px;
+    top: 85px;
+  }
+
+  .letter {
+    width: 90vw;
+    height: 85vh;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .letter h2 {
+    font-size: 24px;
+  }
+}
+
+/* ---------- FINAL GLOBAL PARAGRAPH RULE (applies everywhere) ---------- */
+.letter p{
+  margin-top: 4px !important;
+  margin-bottom: 6px !important;
+  line-height: 1.6 !important;
+  /* optional: reduce font-size slightly to control wrapping:
+     font-size: inherit; */
+}
+</style>
+</head>
+<body>
+<div class="orbs" id="orbs"></div>
+
+<div class="container" id="envelopeContainer">
+  <div class="envelope">
+    <div class="front"></div>
+    <div class="flap"></div>
+    <div class="wax-seal"></div>
+    <div class="header-text">फोर आर्या</div>
+    <div class="sub-header">आगमन</div>
+  </div>
+</div>
+
+<div class="letter" id="letter">
+  <h2></h2>
+
+  <p>दिनहरू साधारण थिए।</p>
+
+  <p>घाम झुल्किन्थ्यो, अस्ताउँथ्यो, बादल लाग्थे, पानी पर्थ्यो र सधैं जस्तै संसार आफ्नै लयमा बगिरहेको थियो। म पनि आफ्नै संसारमा व्यस्त थिएँ, आफ्ना काम, सोच, पीडा र स–साना रमाइला कुरामा हराएको थिएँ।</p>
+
+  <p>तर जसरी ऋतु बदलिन्छन्, ग्रीष्म ओइलिँदै वर्षाको इस्पर्श आउँछ, र शरदको रमाइलोसँगै सर्दी नजिकिँदै जान्छ, त्यसरी नै कसैको मेरो जीवनमा आगमन भयो। आगमन यस्तो भयो कि म त्यसैमा निहित भए, आगमन सुखद भयो, हृदयमा सन्तुष्टि ल्याउने र खुशी भर्ने। म मग्न छु ऊमा। कल्पनामा गर्छु जहाँ उसको मृदु स्पर्श छ, बगैँचाको सुगन्ध छ, विहानीको किरण सँगै, चिरबिर र नदीको मिठो ध्वनी छ। एउटा मानिसका लागि रमाउन यति भए पुग्छ, मेरो लागि यो अथाह छ।</p>
+
+  <p>आगमन त मेरो पनि भएको हो उसको यो समयमा। जिज्ञासु, चञ्चल र अलिकति चिन्तित उसको त्यो प्यारो मुटुको पनि आफ्नो रमाइला प्रतिक्रिया होलान, त्यसको व्याख्या त म गर्न सक्दिन तर अनुमान गर्ने प्रयास जहिले गरिरहन्छु।</p>
+
+  <p>मैले आफैलाई प्रश्न गर्थे — के र कसरी भन्दै। तर उत्तर नखोजि त्यस पलमा रमाउदै जानु नै मेरो उत्तर बन्यो। उत्तर त शब्दमा रहेन, त्यो त अनुभूति रहेछ। अहिले त बिरुवा नै छ। हाँगाहरू पलाउँदै छन्, कोपिलाहरू पनि अलि अलि।</p>
+
+  <p>रुख त हुनै छ।</p>
+
+  <p>लटरम्म फल फल्ने रुख, छाँया दिने।</p>
+
+  <p>वर्षौ त्यहि रहिरहने रुख!</p>
+
+  <p style="text-align:right; font-weight:600;">— ऋषभ</p>
+</div>
+
+<script>
+const container = document.getElementById('envelopeContainer');
+const letter = document.getElementById('letter');
+let isOpen = false;
+
+container.addEventListener('click', () => {
+  if (!isOpen) {
+    container.classList.add('open');
+    setTimeout(() => letter.classList.add('show-letter'), 800);
+    isOpen = true;
+  }
+});
+
+letter.addEventListener('click', () => {
+  if (isOpen) {
+    letter.classList.remove('show-letter');
+    setTimeout(() => container.classList.remove('open'), 900);
+    isOpen = false;
+  }
+});
+
+// Floating orbs
+const orbs = document.getElementById('orbs');
+for (let i = 0; i < 15; i++) {
+  const orb = document.createElement('div');
+  orb.classList.add('orb');
+  orb.style.left = Math.random() * 100 + '%';
+  orb.style.width = orb.style.height = 40 + Math.random() * 60 + 'px';
+  orb.style.animationDelay = Math.random() * 20 + 's';
+  orb.style.animationDuration = 18 + Math.random() * 15 + 's';
+  orbs.appendChild(orb);
+}
+</script>
+</body>
+</html>
