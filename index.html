@@ -168,17 +168,17 @@ body {
 
 .sub-header {
   top: 260px;
-  font-size: 30px;
+  font-size: 23px;
   color: #7a5647;
   font-style: italic;
 }
 
 /* Letter */
 .letter {
-  position: fixed;
-  top: 60%;
+  position: absolute;
+  top: 55%;
   left: 50%;
-  width: 0;
+  width: 80%;
   height: 0;
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.5);
@@ -190,9 +190,23 @@ body {
   padding: 30px;
   line-height: 1.7;
   color: #2a1f19;
-  z-index: 20;
+  z-index: 0; /* behind flap initially */
   pointer-events: none;
 }
+
+.show-letter {
+  position: fixed; /* switch for full-screen view */
+  top: 50%;
+  left: 50%;
+  width: 80vw;
+  height: 80vh;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  overflow-y: auto;
+  pointer-events: auto;
+  z-index: 20; /* above everything */
+}
+
 
 .letter::before {
   content: "";
@@ -212,14 +226,6 @@ body {
   margin-bottom: 16px;
 }
 
-.show-letter {
-  opacity: 1;
-  width: 80vw;
-  height: 80vh;
-  transform: translate(-50%, -50%) scale(1);
-  overflow-y: auto;
-  pointer-events: auto;
-}
 
 /* When open */
 .open .flap { transform: rotateX(-180deg); }
@@ -321,7 +327,7 @@ body {
     <div class="front"></div>
     <div class="flap"></div>
     <div class="wax-seal"></div>
-    <div class="header-text">फोर आर्या</div>
+    <div class="header-text">फर आर्या</div>
     <div class="sub-header">आगमन</div>
   </div>
 </div>
@@ -378,13 +384,13 @@ const nepaliText = `<p>दिनहरू साधारण थिए।</p>
 
 const englishText = `
 <h2></h2>
-<p>The days were simple and ordinary.</p>
-<p>The sun rose and set. Clouds gathered, rain fell, and everything followed its usual rhythm. I lived quietly in my own world, surrounded by routine, thoughts, sorrows and small joys.</p>
+<p>The days were simple and ordinary. The sun rose and set. Clouds gathered, rain fell, and everything followed its usual rhythm. I lived quietly in my own world, surrounded by routine, thoughts, sorrows and small joys.</p>  
 <p>But slowly, just as the seasons change, someone entered my life. Like summer giving way to the rains, the rains softening into autumn, and autumn welcoming winter, her arrival was gentle and unannounced. Before I knew it, she had become a part of my days, something constant and familiar.</p>
 <p>Her presence brought a quiet joy and warmth to my heart. I often find myself lost in thoughts of her — her gentle touch, the scent of a garden, the morning light, the song of birds, and the soft murmur of a river. Such moments are enough for anyone to feel peace. For me, they feel endless. Perhaps I too have entered her world — her curious, lively, slightly anxious heart. I cannot explain its responses, but I can always imagine them.</p>
 <p>I used to ask myself what it all meant and how it happened. Eventually, I stopped searching for answers. Living in the moment became the answer itself. The truth was never in words but in feeling. Now there is a sapling, its branches growing and buds beginning to open. One day it will become a tree, full of fruit, rich with shade, and strong enough to stand for years.</p>   
-<p style="text-align:right; font-weight:600;">— Rishav</p>`; 
+<p style="text-align:right; font-weight:600;">— Rishav</p>`;
 
+// 📨 Open the envelope
 container.addEventListener('click', () => {
   if (!isOpen) {
     container.classList.add('open');
@@ -393,14 +399,16 @@ container.addEventListener('click', () => {
   }
 });
 
+// 📜 Close letter when tapping outside text area (works on phones too)
 letter.addEventListener('click', e => {
-  if (e.target === letter) {
+  if (!e.target.closest('#letterContent') && e.target.id !== 'translateBtn') {
     letter.classList.remove('show-letter');
     setTimeout(() => container.classList.remove('open'), 900);
     isOpen = false;
   }
 });
 
+// 🌐 Toggle translation (Nepali ↔ English)
 translateBtn.addEventListener('click', e => {
   e.stopPropagation();
   letterContent.style.opacity = 0;
@@ -412,7 +420,7 @@ translateBtn.addEventListener('click', e => {
   }, 300);
 });
 
-// Floating orbs
+// ✨ Floating glowing orbs
 const orbs = document.getElementById('orbs');
 for (let i = 0; i < 15; i++) {
   const orb = document.createElement('div');
@@ -424,5 +432,6 @@ for (let i = 0; i < 15; i++) {
   orbs.appendChild(orb);
 }
 </script>
+
 </body>
 </html>
